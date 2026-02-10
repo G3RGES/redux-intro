@@ -100,12 +100,12 @@ function withdrw(amount) {
     payload: amount,
   };
 }
-function requestLoan(amount) {
+function requestLoan(amount, purpose) {
   return {
     type: "account/requestLoan",
     payload: {
       amount,
-      purpose: "car",
+      purpose,
     },
   };
 }
@@ -117,7 +117,7 @@ function payLoan() {
 
 store.dispatch(deposit(500));
 store.dispatch(withdrw(0));
-store.dispatch(requestLoan(200));
+store.dispatch(requestLoan(200, "buy a car"));
+console.log(store.getState());
 store.dispatch(payLoan());
-
 console.log(store.getState());
