@@ -1,4 +1,4 @@
-import { createStore } from "redux";
+import { combineReducers, createStore } from "redux";
 
 const initialStateAccount = {
   balance: 0,
@@ -12,7 +12,7 @@ const initialStateCustomer = {
   createdAt: "",
 };
 
-function Accountreducer(state = initialStateAccount, action) {
+function accountReducer(state = initialStateAccount, action) {
   switch (action.type) {
     case "account/deposit":
       return {
@@ -58,7 +58,15 @@ function Accountreducer(state = initialStateAccount, action) {
   }
 }
 
-const storeAccount = createStore(Accountreducer);
+const rootReducer = combineReducers({
+  account: accountReducer,
+  customer: customerReducer,
+});
+
+// const storeAccount = createStore(accountReducer);
+// const storeCustomer = createStore(customerReducer);
+
+const store = createStore(rootReducer);
 
 function customerReducer(state = initialStateCustomer, action) {
   switch (action.type) {
@@ -80,8 +88,6 @@ function customerReducer(state = initialStateCustomer, action) {
       return state;
   }
 }
-
-const storeCustomer = createStore(customerReducer);
 
 // store.dispatch({
 //   type: "account/deposit",
@@ -144,12 +150,21 @@ function payLoan() {
   };
 }
 
-storeAccount.dispatch(deposit(500));
-storeAccount.dispatch(withdrw(0));
-storeAccount.dispatch(requestLoan(200, "buy a car"));
-console.log(storeAccount.getState());
-storeAccount.dispatch(payLoan());
-console.log(storeAccount.getState());
+// storeAccount.dispatch(deposit(500));
+// storeAccount.dispatch(withdrw(0));
+// storeAccount.dispatch(requestLoan(200, "buy a car"));
+// console.log(storeAccount.getState());
+// storeAccount.dispatch(payLoan());
+// console.log(storeAccount.getState());
+
+//* USING COMBINED REDUCERS
+store.dispatch(deposit(600));
+store.dispatch(withdrw(0));
+console.log(store.getState());
+store.dispatch(requestLoan(600, "buy a car"));
+console.log(store.getState());
+store.dispatch(payLoan());
+console.log(store.getState());
 
 function createCustomer(fullName, nationalID) {
   return {
@@ -162,10 +177,6 @@ function createCustomer(fullName, nationalID) {
   };
 }
 
-storeCustomer.dispatch(createCustomer("Georges Nashaat", "1234567890"));
-
-console.log(storeCustomer.getState());
-
 function updateName(fullName) {
   return {
     type: "customer/updateName",
@@ -173,5 +184,14 @@ function updateName(fullName) {
   };
 }
 
-storeCustomer.dispatch(updateName("Gerges Nashaat"));
-console.log(storeCustomer.getState());
+// storeCustomer.dispatch(createCustomer("Georges Nashaat", "1234567890"));
+
+// console.log(storeCustomer.getState());
+// storeCustomer.dispatch(updateName("Gerges Nashaat"));
+// console.log(storeCustomer.getState());
+
+//* USING COMBINED REDUCERS
+store.dispatch(createCustomer("Georges Nashaat", "1234567890"));
+console.log(store.getState());
+store.dispatch(updateName("Gerges Nashaat"));
+console.log(store.getState());
