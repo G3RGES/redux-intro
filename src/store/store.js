@@ -6,9 +6,13 @@ const initialStateAccount = {
   loanPurpose: "",
 };
 
-const initialStateCustomer = {};
+const initialStateCustomer = {
+  fullName: "",
+  nationalID: "",
+  createdAt: "",
+};
 
-function reducer(state = initialStateAccount, action) {
+function Accountreducer(state = initialStateAccount, action) {
   switch (action.type) {
     case "account/deposit":
       return {
@@ -54,7 +58,30 @@ function reducer(state = initialStateAccount, action) {
   }
 }
 
-const store = createStore(reducer);
+const storeAccount = createStore(Accountreducer);
+
+function customerReducer(state = initialStateCustomer, action) {
+  switch (action.type) {
+    case "customer/create":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+        nationalID: action.payload.nationalID,
+        createdAt: action.payload.createdAt,
+      };
+
+    case "customer/updateName":
+      return {
+        ...state,
+        fullName: action.payload.fullName,
+      };
+
+    default:
+      return state;
+  }
+}
+
+const storeCustomer = createStore(customerReducer);
 
 // store.dispatch({
 //   type: "account/deposit",
@@ -117,9 +144,34 @@ function payLoan() {
   };
 }
 
-store.dispatch(deposit(500));
-store.dispatch(withdrw(0));
-store.dispatch(requestLoan(200, "buy a car"));
-console.log(store.getState());
-store.dispatch(payLoan());
-console.log(store.getState());
+storeAccount.dispatch(deposit(500));
+storeAccount.dispatch(withdrw(0));
+storeAccount.dispatch(requestLoan(200, "buy a car"));
+console.log(storeAccount.getState());
+storeAccount.dispatch(payLoan());
+console.log(storeAccount.getState());
+
+function createCustomer(fullName, nationalID) {
+  return {
+    type: "customer/create",
+    payload: {
+      fullName,
+      nationalID,
+      createdAt: new Date().toISOString(),
+    },
+  };
+}
+
+storeCustomer.dispatch(createCustomer("Georges Nashaat", "1234567890"));
+
+console.log(storeCustomer.getState());
+
+function updateName(fullName) {
+  return {
+    type: "customer/updateName",
+    payload: { fullName },
+  };
+}
+
+storeCustomer.dispatch(updateName("Gerges Nashaat"));
+console.log(storeCustomer.getState());
