@@ -90,7 +90,7 @@ export function deposit(amount) {
     payload: amount,
   };
 }
-export function withdrw(amount) {
+export function withdraw(amount) {
   return {
     type: "account/withdraw",
     payload: amount,
