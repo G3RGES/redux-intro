@@ -84,7 +84,7 @@ export default function accountReducer(state = initialStateAccount, action) {
 
 // console.log(store.getState());
 
-export function deposit(amount) {
+export function deposit(amount, currency) {
   return {
     type: "account/deposit",
     payload: amount,
